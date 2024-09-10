@@ -117,7 +117,7 @@ class DetectLandingPad:
         # Detach the xyxy boxes to make a copy,
         # move the copy into CPU space,
         # and convert to a numpy array
-        boxes_cpu = np.array(list(boxes_xyxy)) # list() creates a deep copy
+        boxes_cpu = np.array(list(boxes_xyxy))  # list() creates a deep copy
 
         # Loop over the boxes list and create a list of bounding boxes
         bounding_boxes = []

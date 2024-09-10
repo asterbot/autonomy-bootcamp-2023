@@ -70,8 +70,31 @@ class DecisionSimpleWaypoint(base_decision.BaseDecision):
 
         # Do something based on the report and the state of this class...
 
+        status = report.status
+        rel_x = self.waypoint.location_x - report.position.location_x
+        rel_y = self.waypoint.location_y - report.position.location_y
+
+        # Logic: If drone is not in range, keep moving towards the waypoint
+        if self.in_range(report):
+            if status == drone_status.DroneStatus.HALTED:
+                command = commands.Command.create_land_command()
+            else:
+                command = commands.Command.create_halt_command()
+        else:
+            command = commands.Command.create_set_relative_destination_command(rel_x, rel_y)
+
         # ============
         # ↑ BOOTCAMPERS MODIFY ABOVE THIS COMMENT ↑
         # ============
 
         return command
+
+    def in_range(self, report: drone_report.DroneReport) -> bool:
+        """
+        Returns bool which denotes whether the waypoint location is in range (by self.acceptance radius)
+        of the drones current location
+        """
+        rel_x = self.waypoint.location_x - report.position.location_x
+        rel_y = self.waypoint.location_y - report.position.location_y
+        distance_squared = (rel_x * rel_x) + (rel_y * rel_y)
+        return distance_squared <= (self.acceptance_radius) * (self.acceptance_radius)
