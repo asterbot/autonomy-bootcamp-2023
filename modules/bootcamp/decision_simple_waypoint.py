@@ -79,7 +79,6 @@ class DecisionSimpleWaypoint(base_decision.BaseDecision):
             distance_squared = (rel_x * rel_x) + (rel_y * rel_y)
             return distance_squared <= (self.acceptance_radius) * (self.acceptance_radius)
 
-
         status = report.status
         rel_x = self.waypoint.location_x - report.position.location_x
         rel_y = self.waypoint.location_y - report.position.location_y
